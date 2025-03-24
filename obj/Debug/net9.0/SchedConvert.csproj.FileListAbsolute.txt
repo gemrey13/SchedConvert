@@ -7,6 +7,7 @@ C:\Users\Gem\projects\SchedConvert\obj\Debug\net9.0\SchedConvert.GeneratedMSBuil
 C:\Users\Gem\projects\SchedConvert\obj\Debug\net9.0\SchedConvert.AssemblyInfoInputs.cache
 C:\Users\Gem\projects\SchedConvert\obj\Debug\net9.0\SchedConvert.AssemblyInfo.cs
 C:\Users\Gem\projects\SchedConvert\obj\Debug\net9.0\SchedConvert.csproj.CoreCompileInputs.cache
+C:\Users\Gem\projects\SchedConvert\obj\Debug\net9.0\SchedConvert.sourcelink.json
 C:\Users\Gem\projects\SchedConvert\obj\Debug\net9.0\SchedConvert.dll
 C:\Users\Gem\projects\SchedConvert\obj\Debug\net9.0\refint\SchedConvert.dll
 C:\Users\Gem\projects\SchedConvert\obj\Debug\net9.0\SchedConvert.pdb

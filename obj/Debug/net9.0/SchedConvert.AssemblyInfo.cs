@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SchedConvert")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+fe2a413a8b8bde5ee8c116d31ae2ceca69ae8336")]
 [assembly: System.Reflection.AssemblyProductAttribute("SchedConvert")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SchedConvert")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

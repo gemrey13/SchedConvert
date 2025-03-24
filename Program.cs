@@ -84,197 +84,229 @@ class Program
 
     static void FCFS()
     {
-        Console.WriteLine("You selected FCFS (First Come First Serve) scheduling.");
-        Console.Write("Enter process arrival times (comma-separated): ");
-        string[] arrivalTimes = (Console.ReadLine() ?? string.Empty).Split(',');
-        Console.Write("Enter process burst times (comma-separated): ");
-        string[] burstTimesInput = (Console.ReadLine() ?? string.Empty).Split(',');
-        int[] burst = Array.ConvertAll(burstTimesInput, s => int.TryParse(s, out int val) ? val : 0);
+        Console.WriteLine("Executing FCFS Scheduling...");
+
+        int[] arrivalTimes = { 0, 2, 4, 6, 8 };
+        int[] burstTimes = { 5, 3, 6, 4, 2 };
 
         int n = arrivalTimes.Length;
-        int[] waitingTime = new int[n];
+        int[] completionTime = new int[n];
         int[] turnAroundTime = new int[n];
+        int[] waitingTime = new int[n];
 
-        waitingTime[0] = 0;
+        completionTime[0] = arrivalTimes[0] + burstTimes[0];
         for (int i = 1; i < n; i++)
         {
-            waitingTime[i] = waitingTime[i - 1] + burst[i - 1];
+            if (completionTime[i - 1] < arrivalTimes[i])
+            {
+                completionTime[i] = arrivalTimes[i] + burstTimes[i];
+            }
+            else
+            {
+                completionTime[i] = completionTime[i - 1] + burstTimes[i];
+            }
         }
 
         for (int i = 0; i < n; i++)
         {
-            turnAroundTime[i] = waitingTime[i] + burst[i];
+            turnAroundTime[i] = completionTime[i] - arrivalTimes[i];
+            waitingTime[i] = turnAroundTime[i] - burstTimes[i];
         }
 
-        Console.WriteLine("Process\tWaiting Time\tTurnaround Time");
+        Console.WriteLine("Process\tAT\tBT\tCT\tTAT\tWT");
         for (int i = 0; i < n; i++)
         {
-            Console.WriteLine($"{i + 1}\t{waitingTime[i]}\t\t{turnAroundTime[i]}");
+            Console.WriteLine($"{i + 1}\t{arrivalTimes[i]}\t{burstTimes[i]}\t{completionTime[i]}\t{turnAroundTime[i]}\t{waitingTime[i]}");
         }
+
+        Console.WriteLine("\nPress any key to return...");
+        Console.ReadKey();
     }
 
     static void SJN()
     {
-        Console.WriteLine("You selected SJN (Shortest Job Next) scheduling.");
-        Console.Write("Enter process burst times (comma-separated): ");
-        string[] burstTimesInput = (Console.ReadLine() ?? string.Empty).Split(',');
-        int[] burst = Array.ConvertAll(burstTimesInput, s => int.TryParse(s, out int val) ? val : 0);
+        Console.WriteLine("Executing SJN Scheduling...");
 
-        int n = burst.Length;
-        Array.Sort(burst);
+        int[] arrivalTimes = { 0, 2, 4, 6, 8 };
+        int[] burstTimes = { 5, 3, 6, 4, 2 };
 
-        int[] waitingTime = new int[n];
+        int n = arrivalTimes.Length;
+        int[] completionTime = new int[n];
         int[] turnAroundTime = new int[n];
+        int[] waitingTime = new int[n];
+        bool[] isCompleted = new bool[n];
 
-        waitingTime[0] = 0;
-        for (int i = 1; i < n; i++)
+        int currentTime = 0, completed = 0;
+
+        while (completed < n)
         {
-            waitingTime[i] = waitingTime[i - 1] + burst[i - 1];
+            int shortestIndex = -1;
+            int shortestBurst = int.MaxValue;
+
+            for (int i = 0; i < n; i++)
+            {
+                if (!isCompleted[i] && arrivalTimes[i] <= currentTime && burstTimes[i] < shortestBurst)
+                {
+                    shortestBurst = burstTimes[i];
+                    shortestIndex = i;
+                }
+            }
+
+            if (shortestIndex != -1)
+            {
+                currentTime += burstTimes[shortestIndex];
+                completionTime[shortestIndex] = currentTime;
+                turnAroundTime[shortestIndex] = completionTime[shortestIndex] - arrivalTimes[shortestIndex];
+                waitingTime[shortestIndex] = turnAroundTime[shortestIndex] - burstTimes[shortestIndex];
+                isCompleted[shortestIndex] = true;
+                completed++;
+            }
+            else
+            {
+                currentTime++;
+            }
         }
 
+        Console.WriteLine("Process\tAT\tBT\tCT\tTAT\tWT");
         for (int i = 0; i < n; i++)
         {
-            turnAroundTime[i] = waitingTime[i] + burst[i];
+            Console.WriteLine($"{i + 1}\t{arrivalTimes[i]}\t{burstTimes[i]}\t{completionTime[i]}\t{turnAroundTime[i]}\t{waitingTime[i]}");
         }
 
-        Console.WriteLine("Process\tWaiting Time\tTurnaround Time");
-        for (int i = 0; i < n; i++)
-        {
-            Console.WriteLine($"{i + 1}\t{waitingTime[i]}\t\t{turnAroundTime[i]}");
-        }
+        Console.WriteLine("\nPress any key to return...");
+        Console.ReadKey();
     }
 
     static void RoundRobin()
     {
-        Console.WriteLine("You selected Round Robin scheduling.");
-        Console.Write("Enter process burst times (comma-separated): ");
-        string[] burstTimesInput = (Console.ReadLine() ?? string.Empty).Split(',');
-        int[] burst = Array.ConvertAll(burstTimesInput, s => int.TryParse(s, out int val) ? val : 0);
-        Console.Write("Enter time quantum: ");
-        if (int.TryParse(Console.ReadLine(), out int quantum))
-        {
-        }
-        else
-        {
-            Console.WriteLine("Invalid input. Please enter a valid number.");
-            return;
-        }
+        Console.WriteLine("Executing Round Robin Scheduling...");
 
-        int n = burst.Length;
-        int[] remainingBurst = (int[])burst.Clone();
-        int[] waitingTime = new int[n];
-        int[] turnAroundTime = new int[n];
+        int[] burstTimes = { 5, 3, 8, 6, 2 };
+        int quantum = 2; // Time quantum
 
+        int n = burstTimes.Length;
+        int[] remainingBurst = (int[])burstTimes.Clone();
+        int[] completionTime = new int[n];
         int time = 0;
+
         bool done;
 
         do
         {
             done = true;
+
             for (int i = 0; i < n; i++)
             {
                 if (remainingBurst[i] > 0)
                 {
                     done = false;
+
                     if (remainingBurst[i] > quantum)
                     {
                         time += quantum;
                         remainingBurst[i] -= quantum;
+                        Console.WriteLine($"Process {i + 1} executed for {quantum} units.");
                     }
                     else
                     {
                         time += remainingBurst[i];
-                        waitingTime[i] = time - burst[i];
+                        Console.WriteLine($"Process {i + 1} executed for {remainingBurst[i]} units.");
                         remainingBurst[i] = 0;
+                        completionTime[i] = time;
+                        Console.WriteLine($"Process {i + 1} completed at time {time}.");
                     }
                 }
             }
         } while (!done);
 
-        for (int i = 0; i < n; i++)
-        {
-            turnAroundTime[i] = waitingTime[i] + burst[i];
-        }
-
-        Console.WriteLine("Process\tWaiting Time\tTurnaround Time");
-        for (int i = 0; i < n; i++)
-        {
-            Console.WriteLine($"{i + 1}\t{waitingTime[i]}\t\t{turnAroundTime[i]}");
-        }
+        Console.WriteLine("\nPress any key to return...");
+        Console.ReadKey();
     }
 
     static void PriorityScheduling()
     {
-        Console.WriteLine("You selected Priority Scheduling.");
-        Console.Write("Enter process burst times (comma-separated): ");
-        string[] burstTimesInput = (Console.ReadLine() ?? string.Empty).Split(',');
-        int[] burst = Array.ConvertAll(burstTimesInput, s => int.TryParse(s, out int val) ? val : 0);
-        Console.Write("Enter process priorities (comma-separated): ");
-        string[] priorities = (Console.ReadLine() ?? string.Empty).Split(',');
+        Console.WriteLine("Executing Priority Scheduling...");
 
-        int n = burst.Length;
-        int[] priority = Array.ConvertAll(priorities, int.Parse);
-        int[] waitingTime = new int[n];
+        int[] burstTimes = { 5, 3, 6, 4 };
+        int[] priorities = { 3, 1, 4, 2 };
+
+        int n = burstTimes.Length;
+        int[] completionTime = new int[n];
         int[] turnAroundTime = new int[n];
+        int[] waitingTime = new int[n];
+        int[] processIds = new int[n];
 
-        Array.Sort(priority, burst);
+        for (int i = 0; i < n; i++)
+        {
+            processIds[i] = i + 1;
+        }
 
-        waitingTime[0] = 0;
+        Array.Sort(priorities, processIds);
+        Array.Sort(priorities, burstTimes);
+
+        completionTime[0] = burstTimes[0];
         for (int i = 1; i < n; i++)
         {
-            waitingTime[i] = waitingTime[i - 1] + burst[i - 1];
+            completionTime[i] = completionTime[i - 1] + burstTimes[i];
         }
 
         for (int i = 0; i < n; i++)
         {
-            turnAroundTime[i] = waitingTime[i] + burst[i];
+            turnAroundTime[i] = completionTime[i];
+            waitingTime[i] = turnAroundTime[i] - burstTimes[i];
         }
 
-        Console.WriteLine("Process\tPriority\tWaiting Time\tTurnaround Time");
+        Console.WriteLine("Process\tPriority\tBT\tCT\tTAT\tWT");
         for (int i = 0; i < n; i++)
         {
-            Console.WriteLine($"{i + 1}\t{priority[i]}\t\t{waitingTime[i]}\t\t{turnAroundTime[i]}");
+            Console.WriteLine($"{processIds[i]}\t{priorities[i]}\t\t{burstTimes[i]}\t{completionTime[i]}\t{turnAroundTime[i]}\t{waitingTime[i]}");
         }
+
+        Console.WriteLine("\nPress any key to return...");
+        Console.ReadKey();
     }
 
     static void MultilevelScheduling()
     {
-        Console.WriteLine("You selected Multilevel Scheduling.");
-        Console.Write("Enter burst times for high-priority processes (comma-separated): ");
-        string[] highPriorityInput = (Console.ReadLine() ?? string.Empty).Split(',');
-        int[] highPriorityBurst = Array.ConvertAll(highPriorityInput, s => int.TryParse(s, out int val) ? val : 0);
-        Console.Write("Enter burst times for low-priority processes (comma-separated): ");
-        string[] lowPriorityInput = (Console.ReadLine() ?? string.Empty).Split(',');
-        int[] lowPriorityBurst = Array.ConvertAll(lowPriorityInput, s => int.TryParse(s, out int val) ? val : 0);
+        Console.WriteLine("Executing Multilevel Queue Scheduling...");
+        Console.WriteLine("Splitting processes into High-Priority and Low-Priority queues...");
 
-        Console.WriteLine("\nExecuting High-Priority Queue (FCFS):");
-        ExecuteFCFS(highPriorityBurst);
+        int[] highPriorityBurst = { 3, 2 }; 
+        int[] lowPriorityBurst = { 4, 6 };  
 
-        Console.WriteLine("\nExecuting Low-Priority Queue (FCFS):");
-        ExecuteFCFS(lowPriorityBurst);
+        Console.WriteLine("\nExecuting High-Priority queue (FCFS)...");
+        ExecuteFCFSWithDetails(highPriorityBurst);
+
+        Console.WriteLine("\nExecuting Low-Priority queue (SJN)...");
+        ExecuteSJNWithDetails(lowPriorityBurst);
+
+        Console.WriteLine("\nPress any key to return...");
+        Console.ReadKey();
     }
 
-    static void ExecuteFCFS(int[] burst)
+    static void ExecuteFCFSWithDetails(int[] burst)
     {
         int n = burst.Length;
-        int[] waitingTime = new int[n];
-        int[] turnAroundTime = new int[n];
-
-        waitingTime[0] = 0;
-        for (int i = 1; i < n; i++)
-        {
-            waitingTime[i] = waitingTime[i - 1] + burst[i - 1];
-        }
+        int time = 0;
 
         for (int i = 0; i < n; i++)
         {
-            turnAroundTime[i] = waitingTime[i] + burst[i];
+            time += burst[i];
+            Console.WriteLine($"Process {i + 1} executed for {burst[i]} units.");
         }
+    }
 
-        Console.WriteLine("Process\tBurst Time\tWaiting Time\tTurnaround Time");
+    static void ExecuteSJNWithDetails(int[] burst)
+    {
+        int n = burst.Length;
+        int[] sortedBurst = (int[])burst.Clone();
+        Array.Sort(sortedBurst); // Sort burst times for SJN
+        int time = 0;
+
         for (int i = 0; i < n; i++)
         {
-            Console.WriteLine($"{i + 1}\t{burst[i]}\t\t{waitingTime[i]}\t\t{turnAroundTime[i]}");
+            time += sortedBurst[i];
+            Console.WriteLine($"Process {i + 1} executed for {sortedBurst[i]} units.");
         }
     }
 
