@@ -1,0 +1,14 @@
+C:\Users\Gem\projects\SchedConvert\bin\Debug\net9.0\SchedConvert.exe
+C:\Users\Gem\projects\SchedConvert\bin\Debug\net9.0\SchedConvert.deps.json
+C:\Users\Gem\projects\SchedConvert\bin\Debug\net9.0\SchedConvert.runtimeconfig.json
+C:\Users\Gem\projects\SchedConvert\bin\Debug\net9.0\SchedConvert.dll
+C:\Users\Gem\projects\SchedConvert\bin\Debug\net9.0\SchedConvert.pdb
+C:\Users\Gem\projects\SchedConvert\obj\Debug\net9.0\SchedConvert.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Gem\projects\SchedConvert\obj\Debug\net9.0\SchedConvert.AssemblyInfoInputs.cache
+C:\Users\Gem\projects\SchedConvert\obj\Debug\net9.0\SchedConvert.AssemblyInfo.cs
+C:\Users\Gem\projects\SchedConvert\obj\Debug\net9.0\SchedConvert.csproj.CoreCompileInputs.cache
+C:\Users\Gem\projects\SchedConvert\obj\Debug\net9.0\SchedConvert.dll
+C:\Users\Gem\projects\SchedConvert\obj\Debug\net9.0\refint\SchedConvert.dll
+C:\Users\Gem\projects\SchedConvert\obj\Debug\net9.0\SchedConvert.pdb
+C:\Users\Gem\projects\SchedConvert\obj\Debug\net9.0\SchedConvert.genruntimeconfig.cache
+C:\Users\Gem\projects\SchedConvert\obj\Debug\net9.0\ref\SchedConvert.dll
